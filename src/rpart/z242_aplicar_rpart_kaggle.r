@@ -9,13 +9,13 @@ require("rpart.plot")
 #Aqui debe cambiar los parametros por los que desea probar
 
 param_basicos  <- list( "cp"=          -1,  #complejidad minima
-                        "minsplit"=   300,     #minima cantidad de registros en un nodo para hacer el split
-                        "minbucket"=  150,     #minima cantidad de registros en una hoja
-                        "maxdepth"=     6 )    #profundidad máxima del arbol
+                        "minsplit"=   1300,     #minima cantidad de registros en un nodo para hacer el split
+                        "minbucket"=  500,     #minima cantidad de registros en una hoja
+                        "maxdepth"=     5 )    #profundidad máxima del arbol
 
 
 #Aqui se debe poner la carpeta de SU computadora local
-setwd("D:\\gdrive\\ITBA2022A\\")  #Establezco el Working Directory
+setwd("C:/Users/Administrator/Desktop/datamining")  #Establezco el Working Directory
 
 #cargo los datos de 202011 que es donde voy a ENTRENAR el modelo
 dtrain  <- fread("./datasets/paquete_premium_202011.csv")
