@@ -10,7 +10,7 @@ require("rlist")
 require("rpart")
 require("parallel")
 
-ksemilla_azar  <- 102191   #cambiar por la primer semilla
+ksemilla_azar  <- 200213   #cambiar por la primer semilla
 
 #------------------------------------------------------------------------------
 #graba a un archivo los componentes de lista
@@ -124,7 +124,7 @@ EstimarGanancia  <- function( x )
 #------------------------------------------------------------------------------
 #Aqui empieza el programa
 
-setwd( "D:\\gdrive\\ITBA2022R\\" )
+setwd( "C:/Users/Administrator/Desktop/datamining" )
 
 #cargo el dataset
 dataset  <- fread("./datasets/paquete_premium_202011.csv")   #donde entreno
@@ -134,7 +134,7 @@ dataset  <- fread("./datasets/paquete_premium_202011.csv")   #donde entreno
 # HT  representa  Hiperparameter Tuning
 dir.create( "./labo/exp/",  showWarnings = FALSE ) 
 dir.create( "./labo/exp/HT3220/", showWarnings = FALSE )
-setwd("D:\\gdrive\\ITBA2022R\\labo\\exp\\HT3320\\")   #Establezco el Working Directory DEL EXPERIMENTO
+setwd("C:/Users/Administrator/Desktop/datamining/labo/exp/")   #Establezco el Working Directory DEL EXPERIMENTO
 
 
 archivo_log  <- "HT332.txt"

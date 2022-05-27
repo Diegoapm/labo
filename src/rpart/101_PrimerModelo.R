@@ -52,5 +52,5 @@ dir.create( "C:/Users/Administrator/Desktop/datamining/labo/exp/" )
 dir.create( "C:/Users/Administrator/Desktop/datamining/labo/exp/KA2001" ) 
 
 fwrite( entrega, 
-        file= "C:/Users/Administrator/Desktop/datamining/labo/exp/KA2001/K101_001.csv", 
+        file= "C:/Users/Administrator/Desktop/datamining/labo/exp/KA2001/K101_0012.csv", 
         sep= "," )
