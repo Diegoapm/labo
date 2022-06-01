@@ -85,7 +85,7 @@ modelo  <- lgb.train( data= dtrain,
                                    num_leaves=         1002,
                                    min_data_in_leaf=   6263,
                                    feature_fraction=      0.9100319271,
-                                   seed=             102191
+                                   seed=             200213
                                   )
                     )
 
