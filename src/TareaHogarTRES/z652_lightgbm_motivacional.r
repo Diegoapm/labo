@@ -2,8 +2,8 @@
 # para motivar a los alumnos a hacer la  "Tarea Hogar TRES"
 
 # para correr el Google Cloud
-#   8 vCPU
-#  64 GB memoria RAM
+# 8   vCPU
+# 64  GB memoria RAM
 # 256 GB espacio en disco
 
 # el resultado queda en  el bucket en  ./exp/KA6520/ 
