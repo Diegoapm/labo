@@ -1,4 +1,4 @@
-# XGBoost  sabor original ,  cambiando algunos de los parametros
+# XGBoost  sabor HISTOGRAMA
 
 #limpio la memoria
 rm( list=ls() )  #remove all objects
@@ -28,12 +28,25 @@ dtrain  <- xgb.DMatrix( data= data.matrix(  dataset[ , campos_buenos, with=FALSE
 #genero el modelo con los parametros por default
 modelo  <- xgb.train( data= dtrain,
                       param= list( objective=       "binary:logistic",
-                                   max_depth=           6,
+                                   tree_method=     "hist",
+                                   grow_policy=     "lossguide",
+                                   max_leaves=          20,
                                    min_child_weight=    1,
                                    eta=                 0.3,
-                                   colsample_bytree=    1.0
+                                   colsample_bytree=    1.0,
+                                   gamma=               0,
+                                   alpha=               0,
+                                   lambda=              0,
+                                   subsample=           1,
+                                   max_bin=             256,
+                                   max_depth=           0,
+                                   scale_pos_weight=    1,
+                                   eta=                 0.02282,
+                                   colsample_bytree=    0.56313,
+                                   min_child_weight=    7,
+                                   max_leaves=          6
                                    ),
-                      nrounds= 34
+                      nrounds= 362
                     )
 
 #aplico el modelo a los datos sin clase
@@ -46,11 +59,11 @@ prediccion  <- predict( modelo,
 
 #Genero la entrega para Kaggle
 entrega  <- as.data.table( list( "numero_de_cliente"= dapply[  , numero_de_cliente],
-                                 "Predicted"= as.integer( prediccion > 1/60 ) )  ) #genero la salida
+                                 "Predicted"= as.integer( prediccion > 0.0143852)  ) ) #genero la salida
 
 dir.create( "./labo/exp/",  showWarnings = FALSE ) 
-dir.create( "./labo/exp/KA5610/", showWarnings = FALSE )
-archivo_salida  <- "./labo/exp/KA5610/KA_561_001.csv"
+dir.create( "./labo/exp/KA5711/", showWarnings = FALSE )
+archivo_salida  <- "./labo/exp/KA5711/KA_571_001.csv"
 
 #genero el archivo para Kaggle
 fwrite( entrega, 

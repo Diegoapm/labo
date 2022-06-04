@@ -31,11 +31,13 @@ dtrain  <- lgb.Dataset( data= data.matrix(  dataset[ , campos_buenos, with=FALSE
 #genero el modelo con los parametros por default
 modelo  <- lgb.train( data= dtrain,
                       param= list( objective=        "binary",
-                                   num_iterations=     29,
+                                   learning_rate=      0.0101889382321561,
+                                   num_iterations=     649,
+                                   max_bin=            31,
                                    max_depth=          -1,
-                                   num_leaves=         31,
-                                   feature_fraction=    1,
-                                   min_data_in_leaf=   20,
+                                   num_leaves=         730,
+                                   feature_fraction=   0.535685960985895,
+                                   min_data_in_leaf=   3658,
                                    seed= 200213)
                     )
 
@@ -53,11 +55,11 @@ prediccion  <- predict( modelo,
 
 #Genero la entrega para Kaggle
 entrega  <- as.data.table( list( "numero_de_cliente"= dapply[  , numero_de_cliente],
-                                 "Predicted"= as.integer(prediccion > 1/60 ) )  ) #genero la salida
+                                 "Predicted"= as.integer(prediccion > 0.016805902 ) )  ) #genero la salida
 
 dir.create( "./labo/exp/",  showWarnings = FALSE ) 
-dir.create( "./labo/exp/KA2512/", showWarnings = FALSE )
-archivo_salida  <- "./labo/exp/KA2512/KA_512_001.csv"
+dir.create( "./labo/exp/KA2512b/", showWarnings = FALSE )
+archivo_salida  <- "./labo/exp/KA2512b/KA_512_001.csv"
 
 #genero el archivo para Kaggle
 fwrite( entrega, 
