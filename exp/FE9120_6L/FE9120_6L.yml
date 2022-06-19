@@ -5,7 +5,7 @@ googlecloud:
 
 
 experiment:
-  script: "src/completo/912_FE_desborde_rates.r"
+  script: "src/completo/912_FE_desborde_rates.R"
   restart: FALSE
   name: "exp"
   requires: [ "DT0001" ]
