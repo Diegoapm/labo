@@ -54,10 +54,10 @@ DummiesNA  <- function( dataset )
   gc()
   nulos  <- colSums( is.na(dataset[ foto_mes %in% PARAM$const$futuro ]) )  #cuento la cantidad de nulos por columna
   colsconNA  <- names( which(  nulos > 0 ) )
-
+  
   dataset[ , paste0( colsconNA, "_isNA") :=  lapply( .SD,  is.na ),
-             .SDcols= colsconNA]
-
+           .SDcols= colsconNA]
+  
   ReportarCampos( dataset )
 }
 #------------------------------------------------------------------------------
@@ -67,7 +67,7 @@ Corregir  <- function( dataset )
 {
   gc()
   #acomodo los errores del dataset
-
+  
   dataset[ foto_mes==201801,  internet   := NA ]
   dataset[ foto_mes==201801,  thomebanking   := NA ]
   dataset[ foto_mes==201801,  chomebanking_trx   := NA ]
@@ -81,14 +81,14 @@ Corregir  <- function( dataset )
   dataset[ foto_mes==201801,  ccajas_depositos   := NA ]
   dataset[ foto_mes==201801,  ccajas_extracciones   := NA ]
   dataset[ foto_mes==201801,  ccajas_otras   := NA ]
-
+  
   dataset[ foto_mes==201806,  tcallcenter   :=  NA ]
   dataset[ foto_mes==201806,  ccallcenter_trx   :=  NA ]
-
+  
   dataset[ foto_mes==201904,  ctarjeta_visa_debitos_automaticos  :=  NA ]
   dataset[ foto_mes==201904,  mtarjeta_visa_debitos_automaticos := NA ]
   dataset[ foto_mes==201904,  Visa_mfinanciacion_limite := NA ]
-
+  
   dataset[ foto_mes==201905,  mrentabilidad     := NA ]
   dataset[ foto_mes==201905,  mrentabilidad_annual     := NA ]
   dataset[ foto_mes==201905,  mcomisiones      := NA ]
@@ -97,7 +97,7 @@ Corregir  <- function( dataset )
   dataset[ foto_mes==201905,  ctarjeta_visa_debitos_automaticos  := NA ]
   dataset[ foto_mes==201905,  ccomisiones_otras := NA ]
   dataset[ foto_mes==201905,  mcomisiones_otras := NA ]
-
+  
   dataset[ foto_mes==201910,  mpasivos_margen   := NA ]
   dataset[ foto_mes==201910,  mactivos_margen   := NA ]
   dataset[ foto_mes==201910,  ccomisiones_otras := NA ]
@@ -112,9 +112,9 @@ Corregir  <- function( dataset )
   dataset[ foto_mes==201910,  mtarjeta_master_descuentos  := NA ]
   dataset[ foto_mes==201910,  ccajeros_propios_descuentos := NA ]
   dataset[ foto_mes==201910,  mcajeros_propios_descuentos := NA ]
-
+  
   dataset[ foto_mes==202001,  cliente_vip   := NA ]
-
+  
   dataset[ foto_mes==202006,  active_quarter   := NA ]
   dataset[ foto_mes==202006,  internet   := NA ]
   dataset[ foto_mes==202006,  mrentabilidad   := NA ]
@@ -157,19 +157,19 @@ Corregir  <- function( dataset )
   dataset[ foto_mes==202006,  ctrx_quarter   := NA ]
   dataset[ foto_mes==202006,  tmobile_app   := NA ]
   dataset[ foto_mes==202006,  cmobile_app_trx   := NA ]
-
-
+  
+  
   dataset[ foto_mes==202010,  internet  := NA ]
   dataset[ foto_mes==202011,  internet  := NA ]
   dataset[ foto_mes==202012,  internet  := NA ]
   dataset[ foto_mes==202101,  internet  := NA ]
-
+  
   dataset[ foto_mes==202009,  tmobile_app  := NA ]
   dataset[ foto_mes==202010,  tmobile_app  := NA ]
   dataset[ foto_mes==202011,  tmobile_app  := NA ]
   dataset[ foto_mes==202012,  tmobile_app  := NA ]
   dataset[ foto_mes==202101,  tmobile_app  := NA ]
-
+  
   ReportarCampos( dataset )
 }
 #------------------------------------------------------------------------------
@@ -179,16 +179,16 @@ AgregarVariables  <- function( dataset )
 {
   gc()
   #INICIO de la seccion donde se deben hacer cambios con variables nuevas
-
+  
   #creo un ctr_quarter que tenga en cuenta cuando los clientes hace 3 menos meses que estan
   dataset[  , ctrx_quarter_normalizado := ctrx_quarter ]
   dataset[ cliente_antiguedad==1 , ctrx_quarter_normalizado := ctrx_quarter * 5 ]
   dataset[ cliente_antiguedad==2 , ctrx_quarter_normalizado := ctrx_quarter * 2 ]
   dataset[ cliente_antiguedad==3 , ctrx_quarter_normalizado := ctrx_quarter * 1.2 ]
-
+  
   #variable extraida de una tesis de maestria de Irlanda
   dataset[  , mpayroll_sobre_edad  := mpayroll / cliente_edad ]
-
+  
   #se crean los nuevos campos para MasterCard  y Visa, teniendo en cuenta los NA's
   #varias formas de combinar Visa_status y Master_status
   dataset[ , mv_status01       := pmax( Master_status,  Visa_status, na.rm = TRUE) ]
@@ -196,19 +196,19 @@ AgregarVariables  <- function( dataset )
   dataset[ , mv_status03       := pmax( ifelse( is.na(Master_status), 10, Master_status) , ifelse( is.na(Visa_status), 10, Visa_status) ) ]
   dataset[ , mv_status04       := ifelse( is.na(Master_status), 10, Master_status)  +  ifelse( is.na(Visa_status), 10, Visa_status)  ]
   dataset[ , mv_status05       := ifelse( is.na(Master_status), 10, Master_status)  +  100*ifelse( is.na(Visa_status), 10, Visa_status)  ]
-
+  
   dataset[ , mv_status06       := ifelse( is.na(Visa_status), 
                                           ifelse( is.na(Master_status), 10, Master_status), 
                                           Visa_status)  ]
-
+  
   dataset[ , mv_status07       := ifelse( is.na(Master_status), 
                                           ifelse( is.na(Visa_status), 10, Visa_status), 
                                           Master_status)  ]
-
-
+  
+  
   #combino MasterCard y Visa
   dataset[ , mv_mfinanciacion_limite := rowSums( cbind( Master_mfinanciacion_limite,  Visa_mfinanciacion_limite) , na.rm=TRUE ) ]
-
+  
   dataset[ , mv_Fvencimiento         := pmin( Master_Fvencimiento, Visa_Fvencimiento, na.rm = TRUE) ]
   dataset[ , mv_Finiciomora          := pmin( Master_Finiciomora, Visa_Finiciomora, na.rm = TRUE) ]
   dataset[ , mv_msaldototal          := rowSums( cbind( Master_msaldototal,  Visa_msaldototal) , na.rm=TRUE ) ]
@@ -228,7 +228,7 @@ AgregarVariables  <- function( dataset )
   dataset[ , mv_cconsumos            := rowSums( cbind( Master_cconsumos,  Visa_cconsumos) , na.rm=TRUE ) ]
   dataset[ , mv_cadelantosefectivo   := rowSums( cbind( Master_cadelantosefectivo,  Visa_cadelantosefectivo) , na.rm=TRUE ) ]
   dataset[ , mv_mpagominimo          := rowSums( cbind( Master_mpagominimo,  Visa_mpagominimo) , na.rm=TRUE ) ]
-
+  
   #a partir de aqui juego con la suma de Mastercard y Visa
   dataset[ , mvr_Master_mlimitecompra:= Master_mlimitecompra / mv_mlimitecompra ]
   dataset[ , mvr_Visa_mlimitecompra  := Visa_mlimitecompra / mv_mlimitecompra ]
@@ -246,7 +246,7 @@ AgregarVariables  <- function( dataset )
   dataset[ , mvr_mpagosdolares       := mv_mpagosdolares / mv_mlimitecompra ]
   dataset[ , mvr_mconsumototal       := mv_mconsumototal  / mv_mlimitecompra ]
   dataset[ , mvr_mpagominimo         := mv_mpagominimo  / mv_mlimitecompra ]
-
+  
   #Aqui debe usted agregar sus propias nuevas variables
   
   dataset[ , mv_msaldototal_by_antig     := mv_msaldototal  / cliente_antiguedad ]  
@@ -275,8 +275,8 @@ AgregarVariables  <- function( dataset )
     cat( "ATENCION, hay", infinitos_qty, "valores infinitos en tu dataset. Seran pasados a NA\n" )
     dataset[mapply(is.infinite, dataset)] <<- NA
   }
-
-
+  
+  
   #valvula de seguridad para evitar valores NaN  que es 0/0
   #paso los NaN a 0 , decision polemica si las hay
   #se invita a asignar un valor razonable segun la semantica del campo creado
@@ -288,7 +288,7 @@ AgregarVariables  <- function( dataset )
     cat( "Si no te gusta la decision, modifica a gusto el programa!\n\n")
     dataset[mapply(is.nan, dataset)] <<- 0
   }
-
+  
   ReportarCampos( dataset )
 }
 #------------------------------------------------------------------------------
@@ -299,22 +299,22 @@ Lags  <- function( cols, nlag, deltas )
 {
   gc()
   sufijo  <- paste0( "_lag", nlag )
-
+  
   dataset[ , paste0( cols, sufijo) := shift(.SD, nlag, NA, "lag"), 
-             by= numero_de_cliente, 
-             .SDcols= cols]
-
+           by= numero_de_cliente, 
+           .SDcols= cols]
+  
   #agrego los deltas de los lags, con un "for" nada elegante
   if( deltas )
   {
     sufijodelta  <- paste0( "_delta", nlag )
-
+    
     for( vcol in cols )
     {
-     dataset[,  paste0(vcol, sufijodelta) := get( vcol)  - get(paste0( vcol, sufijo))]
+      dataset[,  paste0(vcol, sufijodelta) := get( vcol)  - get(paste0( vcol, sufijo))]
     }
   }
-
+  
   ReportarCampos( dataset )
 }
 #------------------------------------------------------------------------------
@@ -404,23 +404,23 @@ TendenciaYmuchomas  <- function( dataset, cols, ventana=6, tendencia=TRUE, minim
   gc()
   #Esta es la cantidad de meses que utilizo para la historia
   ventana_regresion  <- ventana
-
+  
   last  <- nrow( dataset )
-
+  
   #creo el vector_desde que indica cada ventana
   #de esta forma se acelera el procesamiento ya que lo hago una sola vez
   vector_ids   <- dataset$numero_de_cliente
-
+  
   vector_desde  <- seq( -ventana_regresion+2,  nrow(dataset)-ventana_regresion+1 )
   vector_desde[ 1:ventana_regresion ]  <-  1
-
+  
   for( i in 2:last )  if( vector_ids[ i-1 ] !=  vector_ids[ i ] ) {  vector_desde[i] <-  i }
   for( i in 2:last )  if( vector_desde[i] < vector_desde[i-1] )  {  vector_desde[i] <-  vector_desde[i-1] }
-
+  
   for(  campo  in   cols )
   {
     nueva_col     <- fhistC( dataset[ , get(campo) ], vector_desde ) 
-
+    
     if(tendencia)  dataset[ , paste0( campo, "_tend", ventana) := nueva_col[ (0*last +1):(1*last) ]  ]
     if(minimo)     dataset[ , paste0( campo, "_min", ventana)  := nueva_col[ (1*last +1):(2*last) ]  ]
     if(maximo)     dataset[ , paste0( campo, "_max", ventana)  := nueva_col[ (2*last +1):(3*last) ]  ]
@@ -428,20 +428,20 @@ TendenciaYmuchomas  <- function( dataset, cols, ventana=6, tendencia=TRUE, minim
     if(ratioavg)   dataset[ , paste0( campo, "_ratioavg", ventana)  := get(campo) /nueva_col[ (3*last +1):(4*last) ]  ]
     if(ratiomax)   dataset[ , paste0( campo, "_ratiomax", ventana)  := get(campo) /nueva_col[ (2*last +1):(3*last) ]  ]
   }
-
+  
 }
 #------------------------------------------------------------------------------
 #Autor: Antonio Velazquez Bustamente,  UBA 2021
 
 Tony  <- function( cols )
 {
-
+  
   sufijo  <- paste0( "_tony")
-
+  
   dataset[ , paste0( cols, sufijo) := lapply( .SD,  function(x){ x/mean(x, na.rm=TRUE)} ), 
-             by= foto_mes, 
-             .SDcols= cols]
-
+           by= foto_mes, 
+           .SDcols= cols]
+  
   ReportarCampos( dataset )
 }
 #------------------------------------------------------------------------------
@@ -452,19 +452,19 @@ fganancia_lgbm_meseta  <- function(probs, datos)
 {
   vlabels  <- get_field(datos, "label")
   vpesos   <- get_field(datos, "weight")
-
+  
   tbl  <- as.data.table( list( "prob"=probs, "gan"= ifelse( vlabels==1 & vpesos > 1, 60000, -1000 ) ) )
-
+  
   setorder( tbl, -prob )
   tbl[ , posicion := .I ]
   tbl[ , gan_acum :=  cumsum( gan ) ]
   setorder( tbl, -gan_acum )   #voy por la meseta
-
+  
   gan  <- mean( tbl[ 1:500,  gan_acum] )  #meseta de tamaño 500
-
+  
   pos_meseta  <- tbl[ 1:500,  median(posicion)]
   VPOS_CORTE  <<- c( VPOS_CORTE, pos_meseta )
-
+  
   return( list( "name"= "ganancia", 
                 "value"=  gan,
                 "higher_better"= TRUE ) )
@@ -481,27 +481,27 @@ CanaritosImportancia  <- function( canaritos_ratio=0.2 )
   gc()
   ReportarCampos( dataset )
   dataset[ , clase01:= ifelse( clase_ternaria=="CONTINUA", 0, 1 ) ]
-
+  
   for( i  in 1:(ncol(dataset)*canaritos_ratio))  dataset[ , paste0("canarito", i ) :=  runif( nrow(dataset))]
-
+  
   campos_buenos  <- setdiff( colnames(dataset), c("clase_ternaria","clase01" ) )
-
+  
   azar  <- runif( nrow(dataset) )
   dataset[ , entrenamiento := foto_mes>= 202001 &  foto_mes<= 202010 &  foto_mes!=202006 & ( clase01==1 | azar < 0.10 ) ]
-
+  
   dtrain  <- lgb.Dataset( data=    data.matrix(  dataset[ entrenamiento==TRUE, campos_buenos, with=FALSE]),
                           label=   dataset[ entrenamiento==TRUE, clase01],
                           weight=  dataset[ entrenamiento==TRUE, ifelse(clase_ternaria=="BAJA+2", 1.0000001, 1.0)],
                           free_raw_data= FALSE
-                        )
-
+  )
+  
   dvalid  <- lgb.Dataset( data=    data.matrix(  dataset[ foto_mes==202011, campos_buenos, with=FALSE]),
                           label=   dataset[ foto_mes==202011, clase01],
                           weight=  dataset[ foto_mes==202011, ifelse(clase_ternaria=="BAJA+2", 1.0000001, 1.0)],
                           free_raw_data= FALSE
-                          )
-
-
+  )
+  
+  
   param <- list( objective= "binary",
                  metric= "custom",
                  first_metric_only= TRUE,
@@ -520,32 +520,32 @@ CanaritosImportancia  <- function( canaritos_ratio=0.2 )
                  feature_fraction= 1.0,   #lo seteo en 1 para que las primeras variables del dataset no se vean opacadas
                  min_data_in_leaf= 260,
                  num_leaves= 60,
-               # num_threads= 8,
+                 # num_threads= 8,
                  early_stopping_rounds= 200 )
-
+  
   modelo  <- lgb.train( data= dtrain,
                         valids= list( valid= dvalid ),
                         eval= fganancia_lgbm_meseta,
                         param= param,
                         verbose= -100 )
-
+  
   tb_importancia  <- lgb.importance( model= modelo )
   tb_importancia[  , pos := .I ]
-
+  
   fwrite( tb_importancia, 
           file= paste0( "impo_", GVEZ ,".txt"),
           sep= "\t" )
-
+  
   GVEZ  <<- GVEZ + 1
-
+  
   umbral  <- tb_importancia[ Feature %like% "canarito", median(pos) + sd(pos) ]  #Atencion corto en la mediana !!
-
+  
   col_utiles  <- tb_importancia[ pos < umbral & !( Feature %like% "canarito"),  Feature ]
   col_utiles  <-  unique( c( col_utiles,  c("numero_de_cliente","foto_mes","clase_ternaria","mes") ) )
   col_inutiles  <- setdiff( colnames(dataset), col_utiles )
-
+  
   dataset[  ,  (col_inutiles) := NULL ]
-
+  
   ReportarCampos( dataset )
 }
 #------------------------------------------------------------------------------
@@ -578,7 +578,7 @@ cols_lagueables  <- copy( setdiff( colnames(dataset), PARAM$const$campos_fijos )
 if( PARAM$tendenciaYmuchomas$correr ) 
 {
   p  <- PARAM$tendenciaYmuchomas
-
+  
   TendenciaYmuchomas( dataset, 
                       cols= cols_lagueables,
                       ventana=   p$ventana,
@@ -588,8 +588,8 @@ if( PARAM$tendenciaYmuchomas$correr )
                       promedio=  p$promedio,
                       ratioavg=  p$ratioavg,
                       ratiomax=  p$ratiomax
-                    )
-
+  )
+  
 }
 
 
@@ -599,10 +599,10 @@ for( i in 1:length( PARAM$lag ) )
   {
     #veo si tengo que ir agregando variables
     if( PARAM$acumulavars )  cols_lagueables  <- setdiff( colnames(dataset), PARAM$const$campos_fijos )
-
+    
     cols_lagueables  <- intersect( colnames(dataset), cols_lagueables )
     Lags( cols_lagueables, i, PARAM$delta[ i ] )   #calculo los lags de orden  i
-
+    
     #elimino las variables poco importantes, para hacer lugar a las importantes
     if( PARAM$canaritosratio[ i ] > 0 )  CanaritosImportancia( canaritos_ratio= unlist(PARAM$canaritosratio[ i ]) )
   }
