@@ -12,7 +12,7 @@ experiment:
 
 
 param:
-  semilla: 102191
+  semilla: 280103
 
   #donde aplico el modelo final, los datos sin clase
   future:
@@ -25,12 +25,12 @@ param:
 
   #donde entreno
   train:
-    periodos: [ ]
+    periodos: [ 202001, 202002, 202004, 202005, 202007,202008, 202010 ]
     rango:
-      desde:  202001
-      hasta:  202009
-    excluir: [ 202006 ]
-    undersampling: [ {clase: "CONTINUA", prob: 0.1 } ]
+      desde:  
+      hasta:  
+    excluir: 
+    undersampling: [ {clase: "CONTINUA", prob: 0.2 } ]
 
   #donde valido
   validate:
