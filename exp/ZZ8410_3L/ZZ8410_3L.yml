@@ -7,18 +7,18 @@ googlecloud:
 
 
 experiment:
-  script: "src/completo/z991_ZZ_lightgbm.r"
+  script: "src/completo/z999_ZZ_lightgbm_semillerio.r"
   restart: TRUE
   name: "exp"
   requires:   [ "HT9310_3L" ]
 
 param:
-  modelos_qty:  3
+  modelos_qty:  5
   clase_train_POS:    [ "BAJA+2", "BAJA+1" ]
   clase_test_POS:     [ "BAJA+2" ]
-  KA_start:  9000
+  KA_start:  10000
   KA_end:   13000
-  KA_step:    500
+  KA_step:    350
 
 
   files:
