@@ -27,10 +27,10 @@ param:
   train:
     periodos: [ ]
     rango:
-      desde:  202001
-      hasta:  202009
+      desde:  202002
+      hasta:  2020010
     excluir: [ 202006 ]
-    undersampling: [ {clase: "CONTINUA", prob: 0.1 } ]
+    undersampling: [ {clase: "CONTINUA", prob: 0.4 } ]
 
   #donde valido
   validate:
@@ -43,7 +43,7 @@ param:
 
   #donde testeo
   test:
-    periodos: [ 202011 ]
+    periodos: [ 202001 ]
     rango:
       desde:  
       hasta:  
